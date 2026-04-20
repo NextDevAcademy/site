@@ -5,267 +5,296 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NextDev Academy — Coming Soon</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-
-
-
     :root {
-      --bg: #080b0f;
-      --teal: #31a3d5;
-      --teal-dim: rgba(78,201,176,0.12);
-      --white: white;
-      --muted: #ffffff;
-      --border: rgba(78,201,176,0.12);
+      --ink: #0a0a0a;
+      --paper: #f0ece4;
+      --teal: #1fbf9e;
+      --teal-dark: #0d8a72;
+      --rule: rgba(10,10,10,0.12);
     }
-    
 
     html, body {
       height: 100%;
-      background: black;
-      color: var(--white);
-      font-family: 'JetBrains Mono', monospace;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Space Mono', monospace;
       overflow: hidden;
     }
 
-    canvas {
-      position: fixed;
+    .scene {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .rules {
+      position: absolute;
       inset: 0;
-      opacity: 0.35;
       pointer-events: none;
     }
 
-    .wrap {
-      position: relative;
-      height: 100vh;
+    .rules::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 47px,
+              var(--rule) 47px,
+              var(--rule) 48px
+      );
+    }
+
+    .bg-number {
+      position: absolute;
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: clamp(260px, 38vw, 520px);
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(10,10,10,0.07);
+      line-height: 1;
+      top: 50%;
+      left: 50%;
+      transform: translate(-42%, -54%) rotate(-12deg);
+      pointer-events: none;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .v-bar {
+      position: absolute;
+      top: 0;
+      left: 52px;
+      width: 3px;
+      height: 100%;
+      background: var(--teal);
+    }
+
+    .top-strip {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--ink);
+    }
+
+    .bottom-strip {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--ink);
+    }
+
+    .content {
+      position: absolute;
+      inset: 0;
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
-      gap: 0;
-      z-index: 1;
-      padding: 40px;
-      text-align: center;
+      padding: 0 80px 0 92px;
     }
 
-    .eyebrow {
+    .tag {
+      font-family: 'Space Mono', monospace;
       font-size: 11px;
-      letter-spacing: 0.35em;
-      color: var(--teal);
+      letter-spacing: 0.28em;
+      color: var(--teal-dark);
       text-transform: uppercase;
       margin-bottom: 28px;
-      opacity: 0;
-      animation: fadein 0.8s ease 0.2s forwards;
     }
 
-    .logo {
+    .tag::before {
+      content: '▶';
+      margin-right: 8px;
+      font-size: 8px;
+    }
+
+    .wordmark {
       font-family: 'Orbitron', monospace;
-      font-size: 50px;
       font-weight: 900;
-      letter-spacing: -0.02em;
-      line-height: 1;
-      margin-bottom: 8px;
-      opacity: 0;
-      animation: fadein 0.8s ease 0.4s forwards;
+      line-height: 0.9;
+      margin-bottom: 32px;
     }
 
-    .logo .teal { color: var(--teal); }
-
-    .academy {
-      font-family: 'Orbitron', monospace;
-      font-size: 15px;
-      font-weight: 400;
-      letter-spacing: 0.45em;
-      color: var(--muted);
-      text-transform: uppercase;
-      margin-bottom: 52px;
-      opacity: 0;
-      animation: fadein 0.8s ease 0.6s forwards;
+    .wordmark .next {
+      display: block;
+      font-size: clamp(64px, 9vw, 120px);
+      color: var(--ink);
+      letter-spacing: -0.03em;
     }
 
-    .divider {
-      width: 1px;
-      height: 48px;
-      background: linear-gradient(to bottom, transparent, var(--teal), transparent);
-      margin: 0 auto 52px;
-      opacity: 0;
-      animation: fadein 0.8s ease 0.8s forwards;
+    .wordmark .dev {
+      display: block;
+      font-size: clamp(64px, 9vw, 120px);
+      color: var(--teal);
+      letter-spacing: -0.03em;
     }
 
-    .message {
-      font-size: clamp(12px, 1.8vw, 15px);
-      color: var(--muted);
-      font-weight: 300;
-      line-height: 1.9;
-      max-width: 420px;
-      margin-bottom: 52px;
-      opacity: 0;
-      animation: fadein 0.8s ease 1s forwards;
+    .wordmark .academy-label {
+      display: block;
+      font-size: clamp(13px, 1.6vw, 19px);
+      font-weight: 900;
+      letter-spacing: 0.55em;
+      color: var(--ink);
+      margin-top: 16px;
+      text-indent: 4px;
     }
 
-    .message span {
-      color: var(--white);
-      font-weight: 400;
-    }
-
-    .form {
-      display: flex;
-      gap: 0;
-      max-width: 380px;
+    .h-rule {
       width: 100%;
-      opacity: 0;
-      animation: fadein 0.8s ease 1.2s forwards;
+      max-width: 480px;
+      height: 1px;
+      background: var(--ink);
+      margin-bottom: 32px;
     }
 
-    .form input {
-      flex: 1;
-      background: rgba(255,255,255,0.03);
-      border: 0.5px solid var(--border);
-      border-right: none;
-      padding: 13px 16px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--white);
-      outline: none;
-      transition: border-color 0.2s;
+    .descriptor {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(11px, 1.3vw, 14px);
+      font-weight: 400;
+      line-height: 2;
+      color: rgba(10,10,10,0.55);
+      max-width: 400px;
+      margin-bottom: 48px;
     }
 
-    .form input::placeholder { color: var(--muted); }
-    .form input:focus { border-color: rgba(78,201,176,0.4); }
-
-    .form button {
-      background: var(--teal);
-      color: #080b0f;
-      border: none;
-      padding: 13px 20px;
-      font-family: 'Orbitron', monospace;
-      font-size: 10px;
+    .descriptor strong {
+      color: var(--ink);
       font-weight: 700;
-      letter-spacing: 0.1em;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: opacity 0.2s;
     }
 
-    .form button:hover { opacity: 0.85; }
 
-    .note {
-      margin-top: 14px;
-      font-size: 11px;
-      color: var(--muted);
-      opacity: 0;
-      animation: fadein 0.8s ease 1.4s forwards;
-    }
 
     .corner {
-      position: fixed;
+      position: absolute;
+      font-family: 'Space Mono', monospace;
       font-size: 10px;
-      color: var(--muted);
-      letter-spacing: 0.12em;
-      font-family: 'JetBrains Mono', monospace;
-      opacity: 0;
-      animation: fadein 0.8s ease 1.6s forwards;
+      letter-spacing: 0.16em;
+      color: rgba(10,10,10,0.35);
     }
 
-    .corner-tl { top: 28px; left: 32px; }
-    .corner-br { bottom: 28px; right: 32px; }
-    .corner-tl::before { content: '//'; color: var(--teal); margin-right: 6px; }
+    .corner-tr { top: 22px; right: 28px; text-align: right; }
+    .corner-br { bottom: 22px; right: 28px; text-align: right; }
+    .corner-bl { bottom: 22px; left: 92px; }
 
-    .cursor {
-      display: inline-block;
-      width: 2px;
-      height: 12px;
-      background: var(--teal);
-      margin-left: 2px;
-      vertical-align: middle;
-      animation: blink 1s step-end infinite;
+    .stamp {
+      position: absolute;
+      right: 72px;
+      top: 50%;
+      transform: translateY(-50%) rotate(12deg);
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      color: transparent;
+      border: 2px solid rgba(10,10,10,0.12);
+      padding: 10px 16px;
+      text-transform: uppercase;
+      -webkit-text-stroke: 1px rgba(10,10,10,0.18);
+      pointer-events: none;
     }
 
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-    @keyframes fadein { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .coords {
+      position: absolute;
+      top: 22px;
+      left: 92px;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      color: rgba(10,10,10,0.3);
+    }
 
-    .success {
-      display: none;
-      font-size: 12px;
-      color: var(--teal);
-      margin-top: 14px;
-      letter-spacing: 0.08em;
+    @media (max-width: 600px) {
+      .v-bar { left: 20px; }
+
+      .content {
+        padding: 0 24px 0 36px;
+        justify-content: center;
+      }
+
+      .tag { margin-bottom: 20px; }
+
+      .wordmark .next,
+      .wordmark .dev { font-size: clamp(56px, 18vw, 80px); }
+
+      .wordmark .academy-label {
+        font-size: clamp(10px, 3.2vw, 14px);
+        letter-spacing: 0.4em;
+        margin-top: 12px;
+      }
+
+      .wordmark { margin-bottom: 24px; }
+
+      .h-rule { margin-bottom: 24px; }
+
+      .descriptor {
+        font-size: 13px;
+        line-height: 1.9;
+        margin-bottom: 0;
+      }
+
+      .stamp { display: none; }
+
+      .coords { left: 36px; font-size: 9px; }
+
+      .corner-tr { display: none; }
+
+      .corner-br {
+        right: 16px;
+        font-size: 9px;
+      }
+
+      .corner-bl {
+        left: 36px;
+        font-size: 9px;
+      }
+
+      .bg-number {
+        font-size: clamp(160px, 55vw, 260px);
+        transform: translate(-40%, -52%) rotate(-12deg);
+      }
     }
   </style>
 </head>
 <body>
+<div class="scene">
+  <div class="top-strip"></div>
+  <div class="bottom-strip"></div>
+  <div class="rules"></div>
+  <div class="v-bar"></div>
+  <div class="bg-number">2026</div>
 
-<canvas id="c"></canvas>
+  <div class="coords">43.6532° N / 79.3832° W</div>
 
-<div class="wrap">
-  <div class="eyebrow">Coming Soon</div>
+  <div class="content">
+    <div class="tag">Coming Soon</div>
 
-  <div class="logo">NEXT<span class="teal">DEV</span></div>
-  <div class="academy">A C A D E M Y</div>
+    <div class="wordmark">
+      <span class="next">NEXT</span>
+      <span class="dev">DEV</span>
+      <span class="academy-label">A C A D E M Y</span>
+    </div>
 
+    <div class="h-rule"></div>
 
+    <p class="descriptor">
+      Learn to code from <strong>literally nothing</strong>.<br>
+      No experience required. Just curiosity.
+    </p>
+  </div>
 
- 
+  <div class="stamp">EST. 2026</div>
 
-
-
-  <div class="corner corner-br">est. 2026</div>
+  <div class="corner corner-tr">NXTDV — 001</div>
+  <div class="corner corner-br">nextdevacademy.com</div>
+  <div class="corner corner-bl">// v0.1.0 — pre-launch</div>
 </div>
-
-<script>
-  const canvas = document.getElementById('c');
-  const ctx = canvas.getContext('2d');
-  let W, H, particles = [];
-
-  function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-
-  function Particle() {
-    this.x = Math.random() * W;
-    this.y = Math.random() * H;
-    this.size = Math.random() * 1.2 + 0.3;
-    this.speedY = Math.random() * 0.3 + 0.1;
-    this.opacity = Math.random() * 0.5 + 0.1;
-    this.color = Math.random() > 0.7 ? '#4ec9b0' : '#e8edf2';
-  }
-
-  Particle.prototype.update = function() {
-    this.y -= this.speedY;
-    if (this.y < 0) { this.y = H; this.x = Math.random() * W; }
-  };
-
-  Particle.prototype.draw = function() {
-    ctx.globalAlpha = this.opacity;
-    ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, this.size, this.size);
-  };
-
-  for (let i = 0; i < 120; i++) particles.push(new Particle());
-
-  function loop() {
-    ctx.clearRect(0, 0, W, H);
-    particles.forEach(p => { p.update(); p.draw(); });
-    ctx.globalAlpha = 1;
-    requestAnimationFrame(loop);
-  }
-
-  resize();
-  window.addEventListener('resize', resize);
-  loop();
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    const email = document.getElementById('email').value;
-    document.querySelector('.form').style.display = 'none';
-    document.querySelector('.note').style.display = 'none';
-    document.getElementById('success').style.display = 'block';
-    console.log('waitlist:', email);
-  }
-</script>
-
 </body>
 </html>
